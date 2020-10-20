@@ -15,6 +15,7 @@ namespace SEDC.UnitTesting.SUT.Tests._02
 
 
         [Test]
+        [Category("StringMethods")]
         public void Reverse_StringIsNotEmpty_ResultShouldBeAsExpected()
         {
             //Arrange
