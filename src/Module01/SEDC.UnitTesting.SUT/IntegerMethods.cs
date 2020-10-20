@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SEDC.UnitTesting.SUT
@@ -28,6 +29,8 @@ namespace SEDC.UnitTesting.SUT
 
         public int FindNthLargestNumber(List<int> numbers, int nthLargestNumber)
         {
+            if (!numbers.Any())
+                throw new Exception("SEDC ex");
             var orderByDescending = numbers.OrderByDescending(x => x);
 
             var result = orderByDescending.ElementAt(nthLargestNumber - 1);
