@@ -58,7 +58,7 @@ namespace SEDC.Travel.Service
                 result.Name = hotel.Name;
                 result.Description = hotel.Description;
                 result.City = hotel.City;
-                result.Address = result.Address;
+                result.Address = hotel.Address;
                 result.Email = hotel.Email;
 
                 Regex urlRegex = new Regex(@"(http(s)?://)?([\w-]+\.)+[\w-]+(/[\w- ;,./?%&=]*)?");

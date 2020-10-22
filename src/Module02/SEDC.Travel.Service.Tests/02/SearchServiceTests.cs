@@ -2,22 +2,33 @@
 using SEDC.Travel.Domain.Contract;
 using SEDC.Travel.Domain.Model;
 using SEDC.Travel.Service.Model.DTO;
+using SEDC.Travel.Service.Tests.DataFixtures;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Xunit;
 
-namespace SEDC.Travel.Service.Tests._01
+namespace SEDC.Travel.Service.Tests._02
 {
-    public class SearchServiceTests
+    [Collection("SearchCollectionData")]
+    public class SearchServiceTests //: IClassFixture<SearchServiceFixtureData>
     {
+        Mock<ICountryRepository> mockContryRepository;
+        Mock<IHotelRepository> mockHotelRepository;
+        SearchServiceFixtureData _searchServiceFixtureData;
+        public SearchServiceTests(SearchServiceFixtureData searchServiceFixtureData)
+        {
+            mockContryRepository = new Mock<ICountryRepository>();
+            mockHotelRepository = new Mock<IHotelRepository>();
+            _searchServiceFixtureData = searchServiceFixtureData;
+        }
+
         #region GetHotels
         [Fact]
+        [Trait("Add name", "Add vaue")]
         public void GetHotels_NoExistingHotels_ReturnedResultShouldBeEmpty()
         {
             //Arrange
-            var mockContryRepository = new Mock<ICountryRepository>();
-            var mockHotelRepository = new Mock<IHotelRepository>();
 
             //Act
             var searchService = new SearchService(mockContryRepository.Object, mockHotelRepository.Object);
@@ -31,8 +42,6 @@ namespace SEDC.Travel.Service.Tests._01
         public void GetHotels_NoExistingHotels_ReturnedResultShouldBeOfTypeListOfHotelDto()
         {
             //Arrange
-            var mockContryRepository = new Mock<ICountryRepository>();
-            var mockHotelRepository = new Mock<IHotelRepository>();
 
             //Act
             var searchService = new SearchService(mockContryRepository.Object, mockHotelRepository.Object);
@@ -46,9 +55,7 @@ namespace SEDC.Travel.Service.Tests._01
         public void GetHotels_NoExistingHotels_ReturnedResultShouldBeOfTypeListOfHotelDtoCase1()
         {
             //Arrange
-            var mockContryRepository = new Mock<ICountryRepository>();
-            var mockHotelRepository = new Mock<IHotelRepository>();
-            var expected= typeof(List<HotelDto>);
+            var expected = typeof(List<HotelDto>);
 
             //Act
             var searchService = new SearchService(mockContryRepository.Object, mockHotelRepository.Object);
@@ -62,48 +69,26 @@ namespace SEDC.Travel.Service.Tests._01
         public void GetHotels_TwoExistingHotels_ReturnedResultShouldBeTwo()
         {
             //Arrange
-            var mockContryRepository = new Mock<ICountryRepository>();
-            var mockHotelRepository = new Mock<IHotelRepository>();
 
-            var mockedHotels = new List<Hotel>
-            {
-                new Hotel { Id=1, Code="01", Name="Hotel Royal Skopje", Description="Des", City="Skopje", Address="bb", HotelCategoryId=1, Web="http://rojal.mk" },
-                new Hotel { Id=2, Code="02", Name="Hotel Royal", Description="Des", City="Skopje", Address="bb", HotelCategoryId=1, Web="http://rojal.mk" },
-            };
-            var mockedHotelCategory = new HotelCategory { Id = 1, Code = "03", Description = "3 Stars" };
-            var categoryId = 1;
-
-
-            mockHotelRepository.Setup(x => x.GetHotels()).Returns(mockedHotels);
-            mockHotelRepository.Setup(x => x.GetHotelCategory(categoryId)).Returns(mockedHotelCategory);
+            mockHotelRepository.Setup(x => x.GetHotels()).Returns(_searchServiceFixtureData.MockedHotels);
+            mockHotelRepository.Setup(x => x.GetHotelCategory(It.IsAny<int>())).Returns(_searchServiceFixtureData.MockedHotelCategory);
 
             //Act
             var searchService = new SearchService(mockContryRepository.Object, mockHotelRepository.Object);
             var result = searchService.GetHotels();
 
             //Assert
-            Assert.Equal(mockedHotels.Count, result.Count);
+            Assert.Equal(_searchServiceFixtureData.MockedHotels.Count, result.Count);
         }
 
         [Fact]
         public void GetHotels_TwoExistingHotels_ShouldReturnExceptionBecouseOfTheGetCountryNameMethod()
         {
             //Arrange
-            var mockContryRepository = new Mock<ICountryRepository>();
-            var mockHotelRepository = new Mock<IHotelRepository>();
-
-            var mockedHotels = new List<Hotel>
-            {
-                new Hotel { Id=1, Code="01", Name="Hotel Royal Skopje", Description="Des", City="Skopje", Address="bb", HotelCategoryId=1, Web="http://rojal.mk" },
-                new Hotel { Id=2, Code="02", Name="Hotel Royal", Description="Des", City="Skopje", Address="bb", HotelCategoryId=1, Web="http://rojal.mk" },
-            };
-            var mockedHotelCategory = new HotelCategory { Id = 1, Code = "03", Description = "3 Stars" };
-            var categoryId = 1;
             var expMsg = "Something went wrong.";
 
-
-            mockHotelRepository.Setup(x => x.GetHotels()).Returns(mockedHotels);
-            mockHotelRepository.Setup(x => x.GetHotelCategory(categoryId)).Returns(mockedHotelCategory);
+            mockHotelRepository.Setup(x => x.GetHotels()).Returns(_searchServiceFixtureData.MockedHotels);
+            mockHotelRepository.Setup(x => x.GetHotelCategory(It.IsAny<int>())).Returns(_searchServiceFixtureData.MockedHotelCategory);
             mockContryRepository.Setup(x => x.GetCountryName(It.IsAny<int>())).Throws(new Exception());
 
             //Act
@@ -123,16 +108,13 @@ namespace SEDC.Travel.Service.Tests._01
         public void GetHotel_NoExistingHotel_ShouldReturnException()
         {
             //Arrange
-            var mockContryRepository = new Mock<ICountryRepository>();
-            var mockHotelRepository = new Mock<IHotelRepository>();
-            
 
             //Act
             var searchService = new SearchService(mockContryRepository.Object, mockHotelRepository.Object);
 
             //Assert
             Assert.Throws<Exception>(() => searchService.GetHotel(It.IsAny<int>()));
-            
+
         }
 
         #endregion
@@ -141,47 +123,28 @@ namespace SEDC.Travel.Service.Tests._01
         public void MapHotelData_HotelExist_AllDataMustBeCorrect()
         {
             //Arrange
-            var mockContryRepository = new Mock<ICountryRepository>();
-            var mockHotelRepository = new Mock<IHotelRepository>();
 
             var mockedCountry = "Macedonia";
-            var expectedHotel = new HotelDto
-            {
-                Id = 3,
-                Code = "03",
-                Name = "Diplomat Hotel",
-                Description = "Description",
-                City = "Ohrid",
-                Address = "BB",
-                Email = "test@in.com",
-                CountryId = 1,
-                HotelCategoryId = 1,
-                Web = "http://diplomat.mk",
-                CountryName = "Macedonia",
-                HotelCategory = "4 STARS"
-            };
-            var hotel = new Hotel { Id = 3, Code = "03", Name = "Diplomat Hotel", Description = "Description", City = "Ohrid", Address = "BB", Email = "test@in.com", CountryId = 1, HotelCategoryId = 1, Web = "http://diplomat.mk" };
-            var mockedHotelCategory = new HotelCategory { Id = 1, Code = "03", Description = "4 STARS" };
 
             mockContryRepository.Setup(x => x.GetCountryName(It.IsAny<int>())).Returns(mockedCountry);
-            mockHotelRepository.Setup(x => x.GetHotelCategory(It.IsAny<int>())).Returns(mockedHotelCategory);
+            mockHotelRepository.Setup(x => x.GetHotelCategory(It.IsAny<int>())).Returns(_searchServiceFixtureData.MockedHotelCategorySecond);
             //Act
             var searchService = new SearchService(mockContryRepository.Object, mockHotelRepository.Object);
-            var result = searchService.MapHotelData(hotel);
+            var result = searchService.MapHotelData(_searchServiceFixtureData.MockedHotel);
 
             //Assert
-            Assert.Equal(expectedHotel.Id, result.Id);
-            Assert.Equal(expectedHotel.Code, result.Code);
-            Assert.Equal(expectedHotel.Name, result.Name);
-            Assert.Equal(expectedHotel.Description, result.Description);
-            Assert.Equal(expectedHotel.City, result.City);
-            Assert.Equal(expectedHotel.Address, result.Address);
-            Assert.Equal(expectedHotel.Email, result.Email);
-            Assert.Equal(expectedHotel.CountryId, result.CountryId);
-            Assert.Equal(expectedHotel.HotelCategoryId, result.HotelCategoryId);
-            Assert.Equal(expectedHotel.CountryName, result.CountryName);
-            Assert.Equal(expectedHotel.HotelCategory, result.HotelCategory);
-            Assert.Equal(expectedHotel.Web, result.Web);
+            Assert.Equal(_searchServiceFixtureData.MockedExpectedHotel.Id, result.Id);
+            Assert.Equal(_searchServiceFixtureData.MockedExpectedHotel.Code, result.Code);
+            Assert.Equal(_searchServiceFixtureData.MockedExpectedHotel.Name, result.Name);
+            Assert.Equal(_searchServiceFixtureData.MockedExpectedHotel.Description, result.Description);
+            Assert.Equal(_searchServiceFixtureData.MockedExpectedHotel.City, result.City);
+            Assert.Equal(_searchServiceFixtureData.MockedExpectedHotel.Address, result.Address);
+            Assert.Equal(_searchServiceFixtureData.MockedExpectedHotel.Email, result.Email);
+            Assert.Equal(_searchServiceFixtureData.MockedExpectedHotel.CountryId, result.CountryId);
+            Assert.Equal(_searchServiceFixtureData.MockedExpectedHotel.HotelCategoryId, result.HotelCategoryId);
+            Assert.Equal(_searchServiceFixtureData.MockedExpectedHotel.CountryName, result.CountryName);
+            Assert.Equal(_searchServiceFixtureData.MockedExpectedHotel.HotelCategory, result.HotelCategory);
+            Assert.Equal(_searchServiceFixtureData.MockedExpectedHotel.Web, result.Web);
         }
 
 
@@ -189,8 +152,6 @@ namespace SEDC.Travel.Service.Tests._01
         public void MapHotelData_HotelExistWithBadWebAddress_TheWebAddressShouldBeEmpty()
         {
             //Arrange
-            var mockContryRepository = new Mock<ICountryRepository>();
-            var mockHotelRepository = new Mock<IHotelRepository>();
 
             var mockedCountry = "Macedonia";
 
@@ -220,8 +181,8 @@ namespace SEDC.Travel.Service.Tests._01
 
             //Assert
             Assert.Null(result.Web);
-           
-        }
 
+        }
+        
     }
 }
