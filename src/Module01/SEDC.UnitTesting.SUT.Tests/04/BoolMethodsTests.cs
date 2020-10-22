@@ -93,8 +93,60 @@ namespace SEDC.UnitTesting.SUT.Tests._04
             Assert.AreEqual(expectedResult, result);
         }
 
+        [Test, Sequential]
+        [Author("SEDC", "sedc@in.com")]
+        public void IsLeapYear_SequentialValuesYearIsNotLeap_TheResultShouldBeFalse([Values(1997, 1998, 1996)] int year, [Values(false, false, true)] bool expectedResult)
+        {
+            //Arrange
 
+            //Act
+            var result = bm.IsLeapYear(year);
 
+            //Assert
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [TestCase(1996, true)]
+        [TestCase(1997, false)]
+        [TestCase(1998, false)]
+        [TestCase(1999, false)]
+        public void IsLeapYear_WithGivenTestCases_TheReturnedResultShouldBeCorrect(int year, bool expResult)
+        {
+            var result = bm.IsLeapYear(year);
+
+            Assert.AreEqual(expResult, result);
+        }
+
+        [TestCase(1996, ExpectedResult = true)]
+        [TestCase(1997, ExpectedResult = false)]
+        [TestCase(1998, ExpectedResult = false)]
+        [TestCase(1999, ExpectedResult = false)]
+        public bool IsLeapYear_WithGivenTestCasesWithExpectedResult_TheReturnedResultShouldBeCorrect(int year)
+        {
+            return bm.IsLeapYear(year);
+        }
+
+        [TestCaseSource("TestCase")]
+        public void IsLeapYear_WithGivenTestCaseSource_TheReturnedResultShouldBeCorrect(int year, bool expResult)
+        {
+            var result = bm.IsLeapYear(year);
+
+            Assert.AreEqual(expResult, result);
+        }
+
+        [TestCaseSource(typeof(BoolCaseData), "TestCases")]
+        public void IsLeapYear_WithGivenTestCaseSourceWithClass_TheReturnedResultShouldBeCorrect(int year, bool expResult)
+        {
+            var result = bm.IsLeapYear(year);
+
+            Assert.AreEqual(expResult, result);
+        }
+
+        [TestCaseSource("CsvData")]
+        public bool IsLeapYear_WithGivenTestCaseSourceInCsvFile_TheReturnedResultShouldBeCorrect(int year)
+        {
+            return bm.IsLeapYear(year);
+        }
 
         public static List<TestCaseData> CsvData
         {

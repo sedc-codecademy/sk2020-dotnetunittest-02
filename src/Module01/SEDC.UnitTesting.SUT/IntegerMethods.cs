@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SEDC.UnitTesting.SUT
 {
@@ -36,6 +37,13 @@ namespace SEDC.UnitTesting.SUT
             var result = orderByDescending.ElementAt(nthLargestNumber - 1);
 
             return result;
+        }
+
+        public async Task<int> AddAsync(int x, int y)
+        {
+            await Task.Delay(30000);
+
+            return x + y;
         }
     }
 }
