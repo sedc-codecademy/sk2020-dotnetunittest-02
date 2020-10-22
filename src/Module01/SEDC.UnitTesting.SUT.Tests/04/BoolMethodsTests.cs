@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace SEDC.UnitTesting.SUT.Tests._04
@@ -92,6 +93,46 @@ namespace SEDC.UnitTesting.SUT.Tests._04
             Assert.AreEqual(expectedResult, result);
         }
 
+
+
+
+        public static List<TestCaseData> CsvData
+        {
+            get
+            {
+                var testCases = new List<TestCaseData>();
+
+                using (var fs = File.OpenRead(@"C:\Users\j_mar\Desktop\GitProjects\sedc-codecademy\group02\src\Module01\SEDC.UnitTesting.SUT.Tests\04\test.csv"))
+                using (var sr = new StreamReader(fs))
+                {
+                    string line = string.Empty;
+                    while (line != null)
+                    {
+                        line = sr.ReadLine();
+                        if (line != null)
+                        {
+                            string[] split = line.Split(new char[] { ',' },
+                                StringSplitOptions.None);
+
+                            int year = Convert.ToInt32(split[0]);
+                            bool expected = Convert.ToBoolean(split[1]);
+
+                            var testCase = new TestCaseData(year).Returns(expected);
+                            testCases.Add(testCase);
+                        }
+                    }
+                }
+
+                return testCases;
+            }
+        }
+
+        static object[] TestCase =
+        {
+            new object[] { 1996 , true},
+            new object[] { 1999 , false},
+            new object[] { 2001 , false},
+        };
 
 
         //TODO: Add test with[SetCulture]
