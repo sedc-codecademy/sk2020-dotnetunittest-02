@@ -65,15 +65,20 @@ namespace SEDC.Travel.Service
             foreach (var hotels in response.AvailableHotels)
             {
                 var hotel = new AvailableHotel();
-                hotel.Id = hotels.Id;
+
                 hotel.Code = hotels.Code;
 
-                var roomCombination = new List<RoomCombination>();
-                foreach (var item in hotels.RoomCombinations)
+                var rooms = new List<AvailableRoom>();
+                foreach (var room in hotels.AvailableRooms)
                 {
-                    roomCombination.Add(_pricingService.CalculatePrice(response.CheckIn, response.CheckOut, item));
+                    var data = new AvailableRoom();
+                    data.Id = room.Id;
+                    data.Code = room.Code;
+                    data.Price = room.Price;
+                    data.NewPrice = _pricingService.CalculatePrice(response.CheckIn, response.CheckOut, room.Price);
+                    rooms.Add(data);
                 }
-                hotel.RoomCombinations = roomCombination;
+                hotel.AvailableRooms = rooms;
 
                 availableHotels.Add(hotel);
 
@@ -88,9 +93,9 @@ namespace SEDC.Travel.Service
         private HotelAvailabilityRequest Request(SearchRequest searchRequest)
         {
             var request = new HotelAvailabilityRequest();
-            request.CheckIn = searchRequest.FromDate;
-            request.CheckOut = searchRequest.ToDate;
-            request.Nights = (searchRequest.ToDate - searchRequest.FromDate).Days;
+            request.CheckIn = searchRequest.FromDate.Value;
+            request.CheckOut = searchRequest.ToDate.Value;
+            request.Nights = (searchRequest.ToDate.Value - searchRequest.FromDate.Value).Days;
 
             request.Adults = searchRequest.Adults;
             request.Children = searchRequest.Children;

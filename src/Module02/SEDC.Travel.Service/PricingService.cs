@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using SEDC.Travel.Domain.Contract;
 using SEDC.Travel.Service.Contract;
-using SEDC.Travel.Service.Model;
-using SEDC.Travel.Service.Model.ThirdParty;
 
 namespace SEDC.Travel.Service
 {
@@ -58,26 +55,11 @@ namespace SEDC.Travel.Service
             }
         }
 
-        public RoomCombination CalculatePrice(DateTime checkIn, DateTime checkOut, HotelRoomCombination roomCombination)
+        public decimal CalculatePrice(DateTime checkIn, DateTime checkOut, decimal price)
         {
             var pricePercent = GetPricingPercent(checkIn, checkOut);
 
-            var result = new RoomCombination();
-            var roomList = new List<AvailableRoom>();
-            foreach (var item in roomCombination.AvailableRooms)
-            {
-                var room = new AvailableRoom();
-                room.Id = item.Id;
-                room.Code = item.Code;
-                room.Price = item.Price;
-                room.NewPrice = item.Price + ((pricePercent / 100) * 100);
-
-                roomList.Add(room);
-
-                result.FullPrice = result.FullPrice + room.NewPrice;
-            }
-
-            result.AvailableRooms = roomList;
+            var result = price + ((pricePercent / 100) * 100);
             return result;
         }
 

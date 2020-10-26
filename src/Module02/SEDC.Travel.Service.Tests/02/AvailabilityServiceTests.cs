@@ -1,8 +1,11 @@
-﻿using SEDC.Travel.Service.Tests.DataFixtures;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+
 using Xunit;
+using SEDC.Travel.Service.Tests.DataFixtures;
+
+
 
 namespace SEDC.Travel.Service.Tests._02
 {

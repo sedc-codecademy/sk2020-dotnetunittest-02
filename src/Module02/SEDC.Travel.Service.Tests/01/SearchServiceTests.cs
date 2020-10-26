@@ -1,11 +1,11 @@
-﻿using Moq;
+﻿using System;
+using System.Collections.Generic;
+
+using Moq;
+using Xunit;
 using SEDC.Travel.Domain.Contract;
 using SEDC.Travel.Domain.Model;
 using SEDC.Travel.Service.Model.DTO;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Xunit;
 
 namespace SEDC.Travel.Service.Tests._01
 {
@@ -183,7 +183,6 @@ namespace SEDC.Travel.Service.Tests._01
             Assert.Equal(expectedHotel.HotelCategory, result.HotelCategory);
             Assert.Equal(expectedHotel.Web, result.Web);
         }
-
 
         [Fact]
         public void MapHotelData_HotelExistWithBadWebAddress_TheWebAddressShouldBeEmpty()
