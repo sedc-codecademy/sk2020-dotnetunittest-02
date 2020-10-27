@@ -25,7 +25,7 @@ namespace SEDC.UnitTesting.SUT.Tests._01
         }
 
         [Test]
-        [Ignore("FindNthLargestNumber method needs to be refactored", Until ="2020-10-24")]
+        [Ignore("FindNthLargestNumber method needs to be refactored")]//, Until ="2020-10-24")]
         public void IntegerMethods_GivenEmptyList_ShouldReturnCorrectResult()
         {
             //Arrange

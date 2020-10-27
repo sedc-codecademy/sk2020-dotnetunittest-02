@@ -40,7 +40,7 @@ namespace SEDC.UnitTesting.SUT.Tests._03
         {
             //Arrange
             var str = "SEDC";
-            var expStr = "CDE";
+            var expStr = "CDES";
 
             //Act
             var result = sm.Reverse(str);

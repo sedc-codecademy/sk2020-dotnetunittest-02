@@ -7,7 +7,7 @@ namespace SEDC.UnitTesting.SUT
     {
         public string Reverse(string value)
         {
-            Thread.Sleep(30000);
+            //Thread.Sleep(30000);
             var arr = value.ToCharArray();
             Array.Reverse(arr);
             return new string(arr);
