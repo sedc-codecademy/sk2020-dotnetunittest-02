@@ -11,6 +11,7 @@ namespace SEDC.Travel.Service.Tests.DataFixtures
         public SearchRequest RequestCase2 { get; set; }
         public SearchRequest RequestCase3 { get; set; }
         public SearchRequest RequestCase4 { get; set; }
+        public SearchRequest RequestCase5 { get; set; }
         public SearchRequest ValidRequestCase1 { get; set; }
         public HotelAvailabilityRequest HotelAvailabilityRequestCase1 { get; set; }
 
@@ -20,6 +21,7 @@ namespace SEDC.Travel.Service.Tests.DataFixtures
             RequestCase2 = SetRequestCase2();
             RequestCase3 = SetRequestCase3();
             RequestCase4 = SetRequestCase4();
+            RequestCase5 = SetRequestCase5();
             ValidRequestCase1 = SetValidRequestCase1();
             HotelAvailabilityRequestCase1 = SetHotelAvailabilityRequestCase1();
         }
@@ -42,7 +44,7 @@ namespace SEDC.Travel.Service.Tests.DataFixtures
         {
             return new SearchRequest
             {
-                FromDate = null,
+                FromDate = DateTime.Now.AddDays(10),
                 ToDate = null,
                 Adults = 2,
                 Children = 1,
@@ -73,6 +75,19 @@ namespace SEDC.Travel.Service.Tests.DataFixtures
                 FromDate = DateTime.Now.AddDays(10),
                 ToDate = DateTime.Now.AddDays(15),
                 Adults = 1,
+                Children = 4,
+                Rooms = 2,
+                HotelCategory = 1,
+                Country = 1
+            };
+        }
+
+        private SearchRequest SetRequestCase5()
+        {
+            return new SearchRequest
+            {
+                FromDate = DateTime.Now.AddDays(10),
+                ToDate = DateTime.Now.AddDays(15),
                 Children = 4,
                 Rooms = 2,
                 HotelCategory = 1,

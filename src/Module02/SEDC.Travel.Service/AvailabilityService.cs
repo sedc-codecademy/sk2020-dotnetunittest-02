@@ -5,6 +5,7 @@ using SEDC.Travel.Service.Contract;
 using SEDC.Travel.Service.Model;
 using SEDC.Travel.Service.ThirdParty;
 using SEDC.Travel.Service.Model.ThirdParty;
+using System;
 
 namespace SEDC.Travel.Service
 {
@@ -23,29 +24,7 @@ namespace SEDC.Travel.Service
 
         public AvailabilityResponse CheckAvailability(SearchRequest request, List<string> hotelCodes)
         {
-            if (request.FromDate == null)
-            {
-
-            }
-            if (request.ToDate == null)
-            {
-
-            }
-
-            if (request.ToDate < request.FromDate)
-            {
-
-            }
-
-            if (request.Adults < 1)
-            {
-
-            }
-
-            if (request.Adults < request.Rooms)
-            {
-
-            }
+            ValidatedSearchRequest(request);
 
             var hoteSearchRequest = Request(request);
 
@@ -61,6 +40,7 @@ namespace SEDC.Travel.Service
 
             result.CheckIn = response.CheckIn;
             result.CheckOut = response.CheckOut;
+            result.Count = response.Count;
             var availableHotels = new List<AvailableHotel>();
             foreach (var hotels in response.AvailableHotels)
             {
@@ -90,7 +70,34 @@ namespace SEDC.Travel.Service
             return result;
         }
 
-        private HotelAvailabilityRequest Request(SearchRequest searchRequest)
+        public void ValidatedSearchRequest(SearchRequest searchRequest)
+        {
+            if (searchRequest.FromDate == null)
+            {
+                throw new Exception("FromDate must have value");
+            }
+            if (searchRequest.ToDate == null)
+            {
+                throw new Exception("ToDate must have value");
+            }
+
+            if (searchRequest.ToDate < searchRequest.FromDate)
+            {
+                throw new Exception("ToDate must be bigger than FromDate");
+            }
+
+            if (searchRequest.Adults < 1)
+            {
+                throw new Exception("Must have at least one Adult");
+            }
+
+            if (searchRequest.Adults < searchRequest.Rooms)
+            {
+                throw new Exception("Must have at least one Adult per room");
+            }
+        }
+
+        public HotelAvailabilityRequest Request(SearchRequest searchRequest)
         {
             var request = new HotelAvailabilityRequest();
             request.CheckIn = searchRequest.FromDate.Value;
