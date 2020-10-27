@@ -9,6 +9,7 @@ using Moq;
 using SEDC.Travel.Service.ThirdParty;
 using SEDC.Travel.Service.Contract;
 using SEDC.Travel.Service.Model.ThirdParty;
+[assembly: CollectionBehavior(MaxParallelThreads =5)]
 
 namespace SEDC.Travel.Service.Tests._02
 {
@@ -127,6 +128,67 @@ namespace SEDC.Travel.Service.Tests._02
             var result = availabilityService.CheckAvailability(_searchFixtureData.ValidRequestCase1, It.IsAny<List<string>>());
 
             Assert.Equal(expCount, result.Count);
+
+        }
+
+        [Fact]
+        public void CheckAvailability_ValidSearchRequestAndTheServiceReturnedTwoHotels_TheNewPriceShouldHaveValue()
+        {
+            _mockedHotelAvailability.Setup(x => x.SearchHotelAvailability(It.IsAny<HotelAvailabilityRequest>())).Returns(_searchServiceFixtureData.MockedHotelAvailabilityResponse);
+            _mockedPricingService.Setup(x => x.CalculatePrice(It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<decimal>())).Returns(150);
+
+            var availabilityService = new AvailabilityService(_mockedHotelRepository.Object, _mockedHotelAvailability.Object, _mockedPricingService.Object);
+            var result = availabilityService.CheckAvailability(_searchFixtureData.ValidRequestCase1, It.IsAny<List<string>>());
+
+            foreach (var item in result.AvailableHotels)
+            {
+                foreach (var room in item.AvailableRooms)
+                {
+                    Assert.True(room.NewPrice > 0);
+                }
+            }
+
+        }
+
+        [Fact]
+        public void CheckAvailability_ValidSearchRequestAndTheServiceReturnedTwoHotelsWithSetupSequence_TheNewPriceShouldHaveValue()
+        {
+            _mockedHotelAvailability.Setup(x => x.SearchHotelAvailability(It.IsAny<HotelAvailabilityRequest>())).Returns(_searchServiceFixtureData.MockedHotelAvailabilityResponse);
+            _mockedPricingService.SetupSequence(x => x.CalculatePrice(It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<decimal>()))
+                .Returns(120)
+                .Returns(150);
+
+            var availabilityService = new AvailabilityService(_mockedHotelRepository.Object, _mockedHotelAvailability.Object, _mockedPricingService.Object);
+            var result = availabilityService.CheckAvailability(_searchFixtureData.ValidRequestCase1, It.IsAny<List<string>>());
+
+            foreach (var item in result.AvailableHotels)
+            {
+                foreach (var room in item.AvailableRooms)
+                {
+                    Assert.True(room.NewPrice > 0);
+                }
+            }
+
+        }
+
+        [Fact]
+        public void CheckAvailability_ValidSearchRequestAndTheServiceReturnedTwoHotelsWithSetupSequence_TheNewPriceShouldBeBiggerThanPrice()
+        {
+            _mockedHotelAvailability.Setup(x => x.SearchHotelAvailability(It.IsAny<HotelAvailabilityRequest>())).Returns(_searchServiceFixtureData.MockedHotelAvailabilityResponse);
+            _mockedPricingService.SetupSequence(x => x.CalculatePrice(It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<decimal>()))
+                .Returns(120)
+                .Returns(180);
+
+            var availabilityService = new AvailabilityService(_mockedHotelRepository.Object, _mockedHotelAvailability.Object, _mockedPricingService.Object);
+            var result = availabilityService.CheckAvailability(_searchFixtureData.ValidRequestCase1, It.IsAny<List<string>>());
+
+            foreach (var item in result.AvailableHotels)
+            {
+                foreach (var room in item.AvailableRooms)
+                {
+                    Assert.True(room.NewPrice > room.Price);
+                }
+            }
 
         }
 

@@ -147,7 +147,6 @@ namespace SEDC.Travel.Service.Tests._02
             Assert.Equal(_searchServiceFixtureData.MockedExpectedHotel.Web, result.Web);
         }
 
-
         [Fact]
         public void MapHotelData_HotelExistWithBadWebAddress_TheWebAddressShouldBeEmpty()
         {
@@ -184,5 +183,16 @@ namespace SEDC.Travel.Service.Tests._02
 
         }
         
+        [Fact]
+        public void Search_SearchRequestValid_GetHotelByCountryShouldBeCalledOnce()
+        {
+            mockHotelRepository.Setup(x => x.GetHotelsByCategory(It.IsAny<int>())).Returns(new List<Hotel>());
+
+            var searhcService = new SearchService(mockContryRepository.Object, mockHotelRepository.Object);
+            searhcService.Search(_searchServiceFixtureData.ValidSearchRequest);
+
+            mockHotelRepository.Verify(x => x.GetHotelsByCategory(It.IsAny<int>()), Times.Once);
+        }
+
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using SEDC.Travel.Domain.Model;
+using SEDC.Travel.Service.Model;
 using SEDC.Travel.Service.Model.DTO;
 using SEDC.Travel.Service.Model.ThirdParty;
 
@@ -16,6 +17,7 @@ namespace SEDC.Travel.Service.Tests.DataFixtures
         public HotelCategory MockedHotelCategorySecond { get; set; }
         public Hotel MockedHotel { get; set; }
         public HotelDto MockedExpectedHotel { get; set; }
+        public SearchRequest ValidSearchRequest { get; set; }
 
         public HotelAvailabilityResponse MockedHotelAvailabilityResponse { get; set; }
 
@@ -27,6 +29,7 @@ namespace SEDC.Travel.Service.Tests.DataFixtures
             MockedExpectedHotel = SetMockedExpectedHotel();
             MockedHotelCategorySecond = SetMockedHotelCategorySecond();
             MockedHotelAvailabilityResponse = SetMockedHotelAvailabilityResponse();
+            ValidSearchRequest = SetValidSearchRequest();
         }
 
         private List<Hotel> SetMockedHotels()
@@ -98,6 +101,19 @@ namespace SEDC.Travel.Service.Tests.DataFixtures
 
             response.AvailableHotels = availableHotels;
             return response;
+        }
+
+        private SearchRequest SetValidSearchRequest()
+        {
+            return new SearchRequest
+            {
+                FromDate = DateTime.Now.AddDays(10),
+                ToDate = DateTime.Now.AddDays(15),
+                Adults = 2,
+                Children = 4,
+                Rooms = 2,
+                HotelCategory = 1
+            };
         }
     }
 }
