@@ -99,8 +99,8 @@ namespace SEDC.Travel.Service.Tests.DataFixtures
         {
             return new SearchRequest
             {
-                FromDate = DateTime.Now.AddDays(10),
-                ToDate = DateTime.Now.AddDays(15),
+                FromDate = new DateTime(2020, 11, 01),
+                ToDate = new DateTime(2020, 11, 10),
                 Adults = 2,
                 Children = 4,
                 Rooms = 2,
@@ -113,9 +113,9 @@ namespace SEDC.Travel.Service.Tests.DataFixtures
         {
             return new HotelAvailabilityRequest
             {
-                CheckIn = DateTime.Now.AddDays(10),
-                CheckOut = DateTime.Now.AddDays(15),
-                Nights = 5,
+                CheckIn = new DateTime(2020,11,01),
+                CheckOut = new DateTime(2020, 11, 10),
+                Nights = 9,
                 Adults = 2,
                 Children = 4,
                 Rooms = 2,

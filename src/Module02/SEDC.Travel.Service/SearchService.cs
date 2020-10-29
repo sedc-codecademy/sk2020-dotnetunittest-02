@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 using SEDC.Travel.Domain.Contract;
@@ -88,7 +89,13 @@ namespace SEDC.Travel.Service
 
         public List<CountryDto> GetCountries()
         {
-            throw new NotImplementedException();
+            var result = _countryRepository.GetCountries().OrderBy(x => x.CountryName);
+            var data = new List<CountryDto>();
+            foreach (var item in result)
+            {
+                data.Add(new CountryDto { Id = item.Id, CountryName = item.CountryName });
+            }
+            return data;
         }
 
         public List<HotelCategoryDto> GetHotelCategory()

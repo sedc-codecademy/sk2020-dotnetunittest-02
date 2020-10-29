@@ -219,7 +219,7 @@ namespace SEDC.Travel.Service.Tests._01
                 CountryName = "Macedonia",
                 HotelCategory = "4 STARS"
             };
-            var hotel = new Hotel { Id = 3, Code = "03", Name = "Diplomat Hotel", Description = "Description", City = "Ohrid", Address = "BB", Email = "test@in.com", CountryId = 1, HotelCategoryId = 1, Web = "sss.mk" };
+            var hotel = new Hotel { Id = 3, Code = "03", Name = "Diplomat Hotel", Description = "Description", City = "Ohrid", Address = "BB", Email = "test@in.com", CountryId = 1, HotelCategoryId = 1, Web = "????" };
             var mockedHotelCategory = new HotelCategory { Id = 1, Code = "03", Description = "4 STARS" };
 
             mockContryRepository.Setup(x => x.GetCountryName(It.IsAny<int>())).Returns(mockedCountry);

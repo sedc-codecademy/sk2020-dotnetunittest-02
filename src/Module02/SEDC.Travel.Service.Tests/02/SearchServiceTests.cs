@@ -7,6 +7,7 @@ using SEDC.Travel.Domain.Contract;
 using SEDC.Travel.Domain.Model;
 using SEDC.Travel.Service.Model.DTO;
 using SEDC.Travel.Service.Tests.DataFixtures;
+using FluentAssertions;
 
 namespace SEDC.Travel.Service.Tests._02
 {
@@ -192,6 +193,23 @@ namespace SEDC.Travel.Service.Tests._02
             searhcService.Search(_searchServiceFixtureData.ValidSearchRequest);
 
             mockHotelRepository.Verify(x => x.GetHotelsByCategory(It.IsAny<int>()), Times.Once);
+        }
+
+        [Fact]
+        public void GetCountries_HasCountries_ResultShouldBeOrderedByName()
+        {
+            var mockedCountries = new List<Country>
+            {
+                new Country { Id=1, CountryName="Macedonia"},
+                new Country { Id=2, CountryName="Serbia"}
+            };
+            mockContryRepository.Setup(x => x.GetCountries()).Returns(mockedCountries);
+
+            var searhcService = new SearchService(mockContryRepository.Object, mockHotelRepository.Object);
+            var result = searhcService.GetCountries();
+
+            result.Should().BeInAscendingOrder(x => x.CountryName);
+
         }
 
     }
