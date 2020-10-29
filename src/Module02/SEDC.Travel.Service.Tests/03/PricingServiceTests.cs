@@ -21,6 +21,7 @@ namespace SEDC.Travel.Service.Tests._03
 
 
         [Fact]
+        [Trait("Category", "BUGS")]
         public void GetPricingPercent_PeriodsAreNotDefined_ResultShouldBe13()
         {
             var expResult = 13;
@@ -35,6 +36,7 @@ namespace SEDC.Travel.Service.Tests._03
         }
 
         [Fact]
+        [Trait("Category", "BUGS")]
         public void GetPricingPercent_PeriodsAreDefinedAndHaveMatchWithinOnePeriod_ResultShouldBe13()
         {
             var expResult = 10;
@@ -49,6 +51,7 @@ namespace SEDC.Travel.Service.Tests._03
         }
 
         [Fact]
+        [Trait("Category", "BUGS")]
         public void GetPricingPercent_PeriodsAreDefinedAndHaveOverlaping_ResultShouldBe13()
         {
             var expResult = 12;
@@ -63,6 +66,7 @@ namespace SEDC.Travel.Service.Tests._03
         }
 
         [Fact]
+        [Trait("Category", "BUGS")]
         public void GetPricingPercent_PeriodsAreDefinedHaveOnlyMatchForOne_ResultShouldBe13()
         {
             var expResult = 13;
@@ -80,6 +84,7 @@ namespace SEDC.Travel.Service.Tests._03
         [InlineData("2020-01-15", "2020-01-25", 100, 110)]
         [InlineData("2020-03-25", "2020-04-05", 100, 112)]
         [InlineData("2020-12-25", "2021-01-05", 100, 113)]
+        [Trait("Category", "BUGS")]
         public void CalculatePrice_HasValidPeriods_ResultShouldBeCorrect(string checkIn, string checkOut, decimal price, decimal expResult)
         {
             _mockedPricingRepository.Setup(x => x.GetPricings()).Returns(_pricingFixtureData.MockedPricings);
@@ -92,6 +97,7 @@ namespace SEDC.Travel.Service.Tests._03
 
         [Theory]
         [MemberData(nameof(PricingTestMemberCases))]
+        [Trait("Category", "BUGS")]
         public void CalculatePrice_WithMemberDataHasValidPeriods_ResultShouldBeCorrect(DateTime checkIn, DateTime checkOut, decimal price, decimal expResult)
         {
             _mockedPricingRepository.Setup(x => x.GetPricings()).Returns(_pricingFixtureData.MockedPricings);
@@ -104,6 +110,7 @@ namespace SEDC.Travel.Service.Tests._03
 
         [Theory]
         [ClassData(typeof(PricingTestData))]
+        [Trait("Category", "BUGS")]
         public void CalculatePrice_WithClassDataHasValidPeriods_ResultShouldBeCorrect(PriceTestCases testCase)
         {
             _mockedPricingRepository.Setup(x => x.GetPricings()).Returns(_pricingFixtureData.MockedPricings);
