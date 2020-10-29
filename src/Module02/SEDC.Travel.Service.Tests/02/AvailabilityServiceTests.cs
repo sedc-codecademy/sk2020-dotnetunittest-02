@@ -9,6 +9,9 @@ using Moq;
 using SEDC.Travel.Service.ThirdParty;
 using SEDC.Travel.Service.Contract;
 using SEDC.Travel.Service.Model.ThirdParty;
+using System.Linq;
+using FluentAssertions;
+
 [assembly: CollectionBehavior(MaxParallelThreads =5)]
 
 namespace SEDC.Travel.Service.Tests._02
@@ -142,10 +145,11 @@ namespace SEDC.Travel.Service.Tests._02
 
             foreach (var item in result.AvailableHotels)
             {
-                foreach (var room in item.AvailableRooms)
-                {
-                    Assert.True(room.NewPrice > 0);
-                }
+                item.AvailableRooms.Select(x => x.NewPrice).Should().NotContainNulls();
+                //foreach (var room in item.AvailableRooms)
+                //{
+                //    Assert.True(room.NewPrice > 0);
+                //}
             }
 
         }
@@ -163,6 +167,7 @@ namespace SEDC.Travel.Service.Tests._02
 
             foreach (var item in result.AvailableHotels)
             {
+                item.AvailableRooms.Select(x => x.NewPrice).Should().NotContainNulls();
                 foreach (var room in item.AvailableRooms)
                 {
                     Assert.True(room.NewPrice > 0);
@@ -184,6 +189,7 @@ namespace SEDC.Travel.Service.Tests._02
 
             foreach (var item in result.AvailableHotels)
             {
+                //item.AvailableRooms.Select(x => x.NewPrice).Should().HaveCountGreaterThan();
                 foreach (var room in item.AvailableRooms)
                 {
                     Assert.True(room.NewPrice > room.Price);

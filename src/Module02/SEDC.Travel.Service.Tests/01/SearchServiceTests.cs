@@ -6,6 +6,7 @@ using Xunit;
 using SEDC.Travel.Domain.Contract;
 using SEDC.Travel.Domain.Model;
 using SEDC.Travel.Service.Model.DTO;
+using FluentAssertions;
 
 namespace SEDC.Travel.Service.Tests._01
 {
@@ -24,7 +25,8 @@ namespace SEDC.Travel.Service.Tests._01
             var result = searchService.GetHotels();
 
             //Assert
-            Assert.Empty(result);
+            //Assert.Empty(result);
+            result.Should().BeEmpty();
         }
 
         [Fact]
@@ -39,7 +41,8 @@ namespace SEDC.Travel.Service.Tests._01
             var result = searchService.GetHotels();
 
             //Assert
-            Assert.IsType<List<HotelDto>>(result);
+            //Assert.IsType<List<HotelDto>>(result);
+            result.Should().BeOfType<List<HotelDto>>();
         }
 
         [Fact]
@@ -55,7 +58,8 @@ namespace SEDC.Travel.Service.Tests._01
             var result = searchService.GetHotels();
 
             //Assert
-            Assert.IsType(expected, result);
+            //Assert.IsType(expected, result);
+            result.Should().BeOfType(expected);
         }
 
         [Fact]
@@ -82,7 +86,8 @@ namespace SEDC.Travel.Service.Tests._01
             var result = searchService.GetHotels();
 
             //Assert
-            Assert.Equal(mockedHotels.Count, result.Count);
+            //Assert.Equal(mockedHotels.Count, result.Count);
+            result.Should().HaveCount(mockedHotels.Count);
         }
 
         [Fact]
@@ -110,8 +115,11 @@ namespace SEDC.Travel.Service.Tests._01
             var searchService = new SearchService(mockContryRepository.Object, mockHotelRepository.Object);
 
             //Assert
-            var result = Assert.Throws<Exception>(() => searchService.GetHotels());
-            Assert.Equal(expMsg, result.Message);
+            //var result = Assert.Throws<Exception>(() => searchService.GetHotels());
+            //Assert.Equal(expMsg, result.Message);
+            Action result = () => searchService.GetHotels();
+            result.Should().Throw<Exception>().WithMessage(expMsg);
+
         }
 
 
@@ -170,8 +178,11 @@ namespace SEDC.Travel.Service.Tests._01
             var result = searchService.MapHotelData(hotel);
 
             //Assert
-            Assert.Equal(expectedHotel.Id, result.Id);
-            Assert.Equal(expectedHotel.Code, result.Code);
+            //Assert.Equal(expectedHotel.Id, result.Id);
+            //Assert.Equal(expectedHotel.Code, result.Code);
+            result.Name.Should().Be(expectedHotel.Name);
+            result.Code.Should().Be(expectedHotel.Code);
+
             Assert.Equal(expectedHotel.Name, result.Name);
             Assert.Equal(expectedHotel.Description, result.Description);
             Assert.Equal(expectedHotel.City, result.City);
@@ -218,7 +229,8 @@ namespace SEDC.Travel.Service.Tests._01
             var result = searchService.MapHotelData(hotel);
 
             //Assert
-            Assert.Null(result.Web);
+            //Assert.Null(result.Web);
+            result.Web.Should().BeNull();
            
         }
 
