@@ -17,8 +17,8 @@ namespace SEDC.Travel.Service.CustomTests.CustomAttributes
             {
                 int priority = 0;
 
-                //foreach (IAttributeInfo attr in testCase.TestMethod.Method.GetCustomAttributes((typeof(PriorityAttribute).AssemblyQualifiedName)))
-                //    priority = attr.GetNamedArgument<int>("Priority");
+                foreach (IAttributeInfo attr in testCase.TestMethod.Method.GetCustomAttributes((typeof(PriorityAttribute).AssemblyQualifiedName)))
+                    priority = attr.GetNamedArgument<int>("Priority");
 
                 GetOrCreate(sortedMethods, priority).Add(testCase);
             }
