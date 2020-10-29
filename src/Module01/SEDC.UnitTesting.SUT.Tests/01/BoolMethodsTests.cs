@@ -1,5 +1,5 @@
 ﻿using System;
-
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace SEDC.UnitTesting.SUT.Tests._01
@@ -18,7 +18,8 @@ namespace SEDC.UnitTesting.SUT.Tests._01
             var result = bm.IsLeapYear(year);
 
             //Assert
-            Assert.IsTrue(result);
+            //Assert.IsTrue(result);
+            result.Should().BeTrue();
         }
 
         [Test]
@@ -32,7 +33,8 @@ namespace SEDC.UnitTesting.SUT.Tests._01
             var result = bm.IsLeapYear(year);
 
             //Assert
-            Assert.False(result);
+            //Assert.False(result);
+            result.Should().BeFalse();
         }
 
         [Test]
@@ -43,7 +45,10 @@ namespace SEDC.UnitTesting.SUT.Tests._01
             var year = -1997;
 
             //Act+Assert
-            Assert.Throws<ArgumentException>(() => bm.IsLeapYear(year));
+            //Assert.Throws<ArgumentException>(() => bm.IsLeapYear(year));
+            Action result = () => bm.IsLeapYear(year);
+            result.Should().Throw<ArgumentException>();
+
         }
 
         [Test]

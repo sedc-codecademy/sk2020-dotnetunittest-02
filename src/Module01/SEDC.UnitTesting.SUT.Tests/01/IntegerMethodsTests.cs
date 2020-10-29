@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace SEDC.UnitTesting.SUT.Tests._01
@@ -21,7 +21,8 @@ namespace SEDC.UnitTesting.SUT.Tests._01
             var result = im.FindNthLargestNumber(listNumbers, nthLargestNumber);
 
             //Assert
-            Assert.AreEqual(expectedResult, result);
+            //Assert.AreEqual(expectedResult, result);
+            result.Should().Be(expectedResult);
         }
 
         [Test]
@@ -39,6 +40,7 @@ namespace SEDC.UnitTesting.SUT.Tests._01
 
             //Assert
             Assert.AreEqual(expectedResult, result);
+            result.Should().Be(expectedResult);
         }
 
         [Test]
@@ -51,8 +53,10 @@ namespace SEDC.UnitTesting.SUT.Tests._01
             var msg = "SEDC ex";
 
             //Act+Assert
-            var result = Assert.Throws<Exception>(() => im.FindNthLargestNumber(listNumbers, nthLargestNumber));
-            Assert.AreEqual(msg, result.Message);
+            //var result = Assert.Throws<Exception>(() => im.FindNthLargestNumber(listNumbers, nthLargestNumber));
+            //Assert.AreEqual(msg, result.Message);
+            Action result = () => im.FindNthLargestNumber(listNumbers, nthLargestNumber);
+            result.Should().Throw<Exception>().WithMessage(msg);
         }
 
         [Test]

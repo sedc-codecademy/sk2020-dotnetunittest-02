@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using FluentAssertions;
+using NUnit.Framework;
 
 namespace SEDC.UnitTesting.SUT.Tests._01
 {
@@ -18,7 +19,9 @@ namespace SEDC.UnitTesting.SUT.Tests._01
             var result = sm.Reverse(str);
 
             //Assert
-            Assert.AreEqual(expStr, result);
+            //Assert.AreEqual(expStr, result);
+            result.Should().Be(expStr);
+
         }
     }
 }
