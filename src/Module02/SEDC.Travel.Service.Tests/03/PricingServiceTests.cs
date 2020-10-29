@@ -104,14 +104,14 @@ namespace SEDC.Travel.Service.Tests._03
 
         [Theory]
         [ClassData(typeof(PricingTestData))]
-        public void CalculatePrice_WithClassDataHasValidPeriods_ResultShouldBeCorrect(DateTime checkIn, DateTime checkOut, decimal price, decimal expResult)
+        public void CalculatePrice_WithClassDataHasValidPeriods_ResultShouldBeCorrect(PriceTestCases testCase)
         {
             _mockedPricingRepository.Setup(x => x.GetPricings()).Returns(_pricingFixtureData.MockedPricings);
 
             var pricingSerice = new PricingService(_mockedPricingRepository.Object);
-            var result = pricingSerice.CalculatePrice(checkIn, checkOut, price);
+            var result = pricingSerice.CalculatePrice(testCase.CheckIn, testCase.CheckOut, testCase.Price);
 
-            Assert.Equal(expResult, result);
+            Assert.Equal(testCase.ExpPrice, result);
         }
 
 
